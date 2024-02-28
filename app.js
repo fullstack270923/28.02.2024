@@ -3,14 +3,20 @@ const knex = require('knex')
 const data_base = knex({
     client: 'sqlite3',
     connection: {
-        filename: 'our_db.db'
+        //filename: 'our_db.db'
+        filename: ':memory:'
     },
     useNullAsDefault: true
 })
 
 // GET GET/ID POST PUT DELETE 
 
+async function delete_table() {
+    await data_base.raw(`DROP TABLE IF EXISTS COMPANY`);
+}
+
 async function create_table() {
+    data_base.schema.createTableIfNotExists
     await data_base.raw(`CREATE TABLE IF NOT EXISTS COMPANY (
         ID INTEGER PRIMARY KEY AUTOINCREMENT,
         NAME TEXT NOT NULL,
@@ -19,13 +25,64 @@ async function create_table() {
         SALARY REAL);`);
 }
 
-// insert_rows()
+function insert_rows_for_company() {
+    `INSERT INTO COMPANY (NAME,AGE,ADDRESS,SALARY)
+    VALUES ('Paul', 32, 'California', 20000.00);
+    INSERT INTO COMPANY (NAME,AGE,ADDRESS,SALARY)
+    VALUES ('Allen', 25, 'Texas', 15000.00);
+    INSERT INTO COMPANY (NAME,AGE,ADDRESS,SALARY)
+    VALUES ('Teddy', 23, 'Norway', 20000.00);
+    INSERT INTO COMPANY (NAME,AGE,ADDRESS,SALARY)
+    VALUES ('Mark', 25, 'Rich-Mond ', 65000.00);
+    INSERT INTO COMPANY (NAME,AGE,ADDRESS,SALARY)
+    VALUES ('David', 27, 'Texas', 85000.00);
+    INSERT INTO COMPANY (NAME,AGE,ADDRESS,SALARY)
+    VALUES ('Kim', 22, 'South-Hall', 45000.00);`
+    .replaceAll('\n    ', '')
+    .split(';')
+    .filter(query => query)
+    .forEach(async query => { await data_base.raw(query + ';') })
+}
 
 async function get_all() {
     const employees = await data_base.raw("select * from COMPANY")
+    //const employees = await data_base.select('*').from('COMPANY');
     console.log(employees);
+
+    //await data_base.destroy() 
 }
 
+async function insertRow(new_employee) {
+    // insert query
+}
+
+async function updateRow(updated_employee, id) {
+    // update ... where id = ...
+}
+async function deleteRow(id) {
+    // delete ... where id = ...
+}
+async function get_by_id(id) {
+    // select * from company where id = ...
+}
+
+let finished = false;
+delete_table()
 create_table()
-insert_rows()
+insert_rows_for_company()
 get_all()
+
+const new_employee = {ID: 5, NAME: 'David', AGE: 27, ADDRESS: 'Texas', SALARY: 85000 }
+insertRow(new_employee)
+
+const emp5 = get_by_id(5)
+log(emp5)
+
+const updated_employee = {ID: 5, NAME: 'David', AGE: 27, ADDRESS: 'Alaska', SALARY: 85000 }
+updateRow(updated_employee, 5)
+
+emp5 = get_by_id(5)
+log(emp5)
+
+deleteRow(5)
+
