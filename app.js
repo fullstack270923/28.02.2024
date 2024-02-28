@@ -75,14 +75,12 @@ get_all()
 const new_employee = {ID: 5, NAME: 'David', AGE: 27, ADDRESS: 'Texas', SALARY: 85000 }
 insertRow(new_employee)
 
-const emp5 = get_by_id(5)
-log(emp5)
+get_by_id(5)
 
 const updated_employee = {ID: 5, NAME: 'David', AGE: 27, ADDRESS: 'Alaska', SALARY: 85000 }
 updateRow(updated_employee, 5)
-
-emp5 = get_by_id(5)
-log(emp5)
+get_by_id(5)
 
 deleteRow(5)
 
+get_all()
