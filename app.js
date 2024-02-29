@@ -54,6 +54,14 @@ async function get_all() {
 
 async function insertRow(new_employee) {
     // insert query
+    // option 1
+    // data_base.raw(`INSERT INTO COMPANY (NAME,AGE,ADDRESS,SALARY)
+    //                 VALUES ('${new_employee.NAME}', ${new_employee.AGE},'${new_employee.ADDRESS}', ${new_employee.AGE});`)
+
+    // option 2
+    data_base.raw(`INSERT INTO COMPANY (NAME,AGE,ADDRESS,SALARY)
+                    VALUES (?, ?, ?, ?);`,
+                  [new_employee.NAME, new_employee.AGE, new_employee.ADDRESS, new_employee.AGE])
 }
 
 async function updateRow(updated_employee, id) {
@@ -72,12 +80,12 @@ create_table()
 insert_rows_for_company()
 get_all()
 
-const new_employee = {ID: 5, NAME: 'David', AGE: 27, ADDRESS: 'Texas', SALARY: 85000 }
+const new_employee = {NAME: 'David', AGE: 27, ADDRESS: 'Texas', SALARY: 85000 }
 insertRow(new_employee)
 
 get_by_id(5)
 
-const updated_employee = {ID: 5, NAME: 'David', AGE: 27, ADDRESS: 'Alaska', SALARY: 85000 }
+const updated_employee = {NAME: 'David', AGE: 27, ADDRESS: 'Alaska', SALARY: 85000 }
 updateRow(updated_employee, 5)
 get_by_id(5)
 
