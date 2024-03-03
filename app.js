@@ -45,6 +45,7 @@ function insert_rows_for_company() {
         .forEach(async query => { await data_base.raw(query + ';') })
 }
 
+///////////////// GET
 async function get_all() {
     const employees = await data_base.raw("select * from COMPANY")
     //const employees = await data_base.select('*').from('COMPANY');
@@ -53,6 +54,7 @@ async function get_all() {
     //await data_base.destroy() 
 }
 
+///////////////// POST
 async function insertRow(new_employee) {
     // insert query
     // option 1
@@ -65,13 +67,16 @@ async function insertRow(new_employee) {
         [new_employee.NAME, new_employee.AGE, new_employee.ADDRESS, new_employee.AGE])
 }
 
+///////////////// PUT-PATCH
 async function updateRow(updated_employee, id) {
     await data_base.raw(`UPDATE COMPANY set NAME=?,AGE=?,ADDRESS=?,SALARY=? where id=?`,
         [new_employee.NAME, new_employee.AGE, new_employee.ADDRESS, new_employee.SALARY, id])
 }
+///////////////// DELETE
 async function deleteRow(id) {
     await data_base.raw(`DELETE FROM COMPANY where id=?`, [id])
 }
+///////////////// GET\id
 async function get_by_id(id) {
     const employee = await data_base.raw(`select * from COMPANY where id = ${id}`)
     console.log(employee);
