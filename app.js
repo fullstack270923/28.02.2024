@@ -15,14 +15,25 @@ async function delete_table() {
     await data_base.raw(`DROP TABLE IF EXISTS COMPANY`);
 }
 
+
 async function create_table() {
     data_base.schema.createTableIfNotExists
+    await data_base.raw
+    
+    data_base.schema.createTableIfNotExists
     await data_base.raw(`CREATE TABLE IF NOT EXISTS COMPANY (
-        ID INTEGER PRIMARY KEY AUTOINCREMENT,
-        NAME TEXT NOT NULL,
-        AGE INT NOT NULL,
-        ADDRESS CHAR(50),
-        SALARY REAL);`);
+            ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            NAME TEXT NOT NULL,
+            AGE INT NOT NULL,
+            ADDRESS CHAR(50),
+            SALARY REAL);`);
+    data_base.schema.createTableIfNotExists
+    await data_base.raw(`CREATE TABLE IF NOT EXISTS COMPANY (
+                ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                NAME TEXT NOT NULL,
+                AGE INT NOT NULL,
+                ADDRESS CHAR(50),
+                SALARY REAL);`);
 }
 
 function insert_rows_for_company() {
@@ -38,10 +49,10 @@ function insert_rows_for_company() {
     VALUES ('David', 27, 'Texas', 85000.00);
     INSERT INTO COMPANY (NAME,AGE,ADDRESS,SALARY)
     VALUES ('Kim', 22, 'South-Hall', 45000.00);`
-    .replaceAll('\n    ', '')
-    .split(';')
-    .filter(query => query)
-    .forEach(async query => { await data_base.raw(query + ';') })
+        .replaceAll('\n    ', '')
+        .split(';')
+        .filter(query => query)
+        .forEach(async query => { await data_base.raw(query + ';') })
 }
 
 async function get_all() {
@@ -59,19 +70,20 @@ async function insertRow(new_employee) {
     //                 VALUES ('${new_employee.NAME}', ${new_employee.AGE},'${new_employee.ADDRESS}', ${new_employee.AGE});`)
 
     // option 2
-    data_base.raw(`INSERT INTO COMPANY (NAME,AGE,ADDRESS,SALARY)
+    await data_base.raw(`INSERT INTO COMPANY (NAME,AGE,ADDRESS,SALARY)
                     VALUES (?, ?, ?, ?);`,
-                  [new_employee.NAME, new_employee.AGE, new_employee.ADDRESS, new_employee.AGE])
+        [new_employee.NAME, new_employee.AGE, new_employee.ADDRESS, new_employee.AGE])
 }
 
 async function updateRow(updated_employee, id) {
-    // update ... where id = ...
+    await data_base.raw(`UPDATE COMPANY set NAME=?,AGE=?,ADDRESS=?,SALARY=? where id=?`,
+        [new_employee.NAME, new_employee.AGE, new_employee.ADDRESS, new_employee.SALARY, id])
 }
 async function deleteRow(id) {
-    // delete ... where id = ...
+    await data_base.raw(`DELETE FROM COMPANY where id=?`, [id])
 }
 async function get_by_id(id) {
-    // select * from company where id = ...
+    const employee = await data_base.raw(`select * from COMPANY where id = ${id}`)
 }
 
 let finished = false;
@@ -80,12 +92,12 @@ create_table()
 insert_rows_for_company()
 get_all()
 
-const new_employee = {NAME: 'David', AGE: 27, ADDRESS: 'Texas', SALARY: 85000 }
+const new_employee = { NAME: 'David', AGE: 27, ADDRESS: 'Texas', SALARY: 85000 }
 insertRow(new_employee)
 
 get_by_id(5)
 
-const updated_employee = {NAME: 'David', AGE: 27, ADDRESS: 'Alaska', SALARY: 85000 }
+const updated_employee = { NAME: 'David', AGE: 27, ADDRESS: 'Alaska', SALARY: 85000 }
 updateRow(updated_employee, 5)
 get_by_id(5)
 
