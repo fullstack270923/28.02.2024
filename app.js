@@ -18,22 +18,12 @@ async function delete_table() {
 
 async function create_table() {
     data_base.schema.createTableIfNotExists
-    await data_base.raw
-    
-    data_base.schema.createTableIfNotExists
     await data_base.raw(`CREATE TABLE IF NOT EXISTS COMPANY (
             ID INTEGER PRIMARY KEY AUTOINCREMENT,
             NAME TEXT NOT NULL,
             AGE INT NOT NULL,
             ADDRESS CHAR(50),
             SALARY REAL);`);
-    data_base.schema.createTableIfNotExists
-    await data_base.raw(`CREATE TABLE IF NOT EXISTS COMPANY (
-                ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                NAME TEXT NOT NULL,
-                AGE INT NOT NULL,
-                ADDRESS CHAR(50),
-                SALARY REAL);`);
 }
 
 function insert_rows_for_company() {
@@ -84,6 +74,7 @@ async function deleteRow(id) {
 }
 async function get_by_id(id) {
     const employee = await data_base.raw(`select * from COMPANY where id = ${id}`)
+    console.log(employee);
 }
 
 let finished = false;
