@@ -57,7 +57,7 @@ async function get_all() {
 ///////////////// POST
 async function insertRow(new_employee) {
     // insert query
-    // option 1
+    // option 1.
     // data_base.raw(`INSERT INTO COMPANY (NAME,AGE,ADDRESS,SALARY)
     //                 VALUES ('${new_employee.NAME}', ${new_employee.AGE},'${new_employee.ADDRESS}', ${new_employee.AGE});`)
 
